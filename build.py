@@ -121,6 +121,13 @@ def build_year_pages(articles):
         out.write_text(html, encoding="utf-8")
 
 
+def build_about_page():
+    """生成关于页。"""
+    template = env.get_template("about.html")
+    html = template.render(base_url=BASE_URL)
+    (OUTPUT_DIR / "about.html").write_text(html, encoding="utf-8")
+
+
 def build():
     """完整构建流程。"""
     # 清理并重建输出目录
@@ -139,6 +146,7 @@ def build():
     build_index(articles)
     build_articles(articles)
     build_year_pages(articles)
+    build_about_page()
 
     print(f"Built {len(articles)} articles -> {OUTPUT_DIR}")
 
