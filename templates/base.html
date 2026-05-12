@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %} — 迟到了的碎碎念</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ base_url }}/static/css/style.css">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
     <header class="site-header">
         <nav class="site-nav">
-            <a href="/" class="site-logo">迟到了的碎碎念</a>
+            <a href="{{ base_url }}/" class="site-logo">迟到了的碎碎念</a>
             <div class="nav-links">
-                <a href="/">首页</a>
-                <a href="/2026/">2026</a>
-                <a href="/2025/">2025</a>
-                <a href="/2024/">2024</a>
+                <a href="{{ base_url }}/">首页</a>
+                <a href="{{ base_url }}/2026/">2026</a>
+                <a href="{{ base_url }}/2025/">2025</a>
+                <a href="{{ base_url }}/2024/">2024</a>
                 <a href="#about" class="nav-about">关于</a>
             </div>
         </nav>
@@ -29,6 +29,6 @@
         <p>© 迟到了的碎碎念 · 随笔与思考</p>
     </footer>
 
-    <script src="/static/js/main.js"></script>
+    <script src="{{ base_url }}/static/js/main.js"></script>
 </body>
 </html>

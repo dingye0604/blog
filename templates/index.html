@@ -12,7 +12,7 @@
 <section class="article-list">
     {% for year, year_articles in articles | groupby('year') | reverse %}
     <div class="year-section">
-        <h2 class="year-label"><a href="/{{ year }}/">{{ year }}</a></h2>
+        <h2 class="year-label"><a href="{{ base_url }}/{{ year }}/">{{ year }}</a></h2>
         <div class="year-articles">
             {% for article in year_articles %}
             <article class="article-card">

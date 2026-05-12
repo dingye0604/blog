@@ -15,6 +15,7 @@ CONTENT_DIR = Path("content")
 TEMPLATES_DIR = Path("templates")
 STATIC_DIR = Path("static")
 OUTPUT_DIR = Path("output")
+BASE_URL = "/blog"  # GitHub Pages 子目录部署，根目录部署改为 ""
 
 # ── Jinja2 ────────────────────────────────────────
 env = Environment(
@@ -39,7 +40,7 @@ def get_articles():
         rel = md_path.relative_to(CONTENT_DIR)
         year = rel.parts[0]
         slug = rel.stem
-        url = f"/{year}/{slug}.html"
+        url = f"{BASE_URL}/{year}/{slug}.html"
         articles.append({
             "meta": post.metadata,
             "content": post.content,
@@ -81,7 +82,7 @@ def copy_content_assets():
 def build_index(articles):
     """生成首页。"""
     template = env.get_template("index.html")
-    html = template.render(articles=articles)
+    html = template.render(articles=articles, base_url=BASE_URL)
     (OUTPUT_DIR / "index.html").write_text(html, encoding="utf-8")
 
 
@@ -98,6 +99,7 @@ def build_articles(articles):
             content=body_html,
             toc=toc,
             articles=articles,
+            base_url=BASE_URL,
         )
 
         out = OUTPUT_DIR / art["year"] / f"{art['slug']}.html"
@@ -113,7 +115,7 @@ def build_year_pages(articles):
 
     template = env.get_template("year.html")
     for year, arts in sorted(by_year.items(), reverse=True):
-        html = template.render(year=year, articles=arts, all_articles=articles)
+        html = template.render(year=year, articles=arts, all_articles=articles, base_url=BASE_URL)
         out = OUTPUT_DIR / year / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html, encoding="utf-8")
