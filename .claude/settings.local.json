@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python *)",
+      "Bash(D:/web/venv/Scripts/python --version)",
+      "Bash(D:/web/venv/Scripts/pip install *)",
+      "Bash(D:/web/venv/Scripts/python *)",
+      "Bash(git -C /d/web status)",
+      "Bash(git *)"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.meta.title }}{% endblock %}
+
+{% block content %}
+<article class="article-page">
+    <header class="article-header">
+        <h1 class="article-page-title">{{ article.meta.title }}</h1>
+        <div class="article-page-meta">
+            <time>{{ article.meta.date }}</time>
+            {% if article.meta.tags %}
+            <span class="article-page-tags">
+                {% for tag in article.meta.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </span>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if toc %}
+    <nav class="article-toc">
+        <div class="toc-title">目录</div>
+        {{ toc | safe }}
+    </nav>
+    {% endif %}
+
+    <div class="article-body">
+        {{ content | safe }}
+    </div>
+
+    <nav class="article-nav">
+        <a href="/" class="nav-back">← 返回首页</a>
+    </nav>
+</article>
+{% endblock %}

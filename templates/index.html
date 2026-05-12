@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1 class="hero-title">迟到了的碎碎念</h1>
+    <p class="hero-desc">随笔 · 影评 · 辩论 · 成长</p>
+    <p class="hero-quote">"所谓伊人，在水一方"</p>
+</section>
+
+<section class="article-list">
+    {% for year, year_articles in articles | groupby('year') | reverse %}
+    <div class="year-section">
+        <h2 class="year-label"><a href="/{{ year }}/">{{ year }}</a></h2>
+        <div class="year-articles">
+            {% for article in year_articles %}
+            <article class="article-card">
+                <a href="{{ article.url }}" class="article-link">
+                    <h3 class="article-title">{{ article.meta.title }}</h3>
+                    {% if article.meta.desc %}
+                    <p class="article-desc">{{ article.meta.desc }}</p>
+                    {% endif %}
+                    <div class="article-meta">
+                        <time>{{ article.meta.date }}</time>
+                        {% if article.meta.tags %}
+                        <span class="article-tags">
+                            {% for tag in article.meta.tags %}
+                            <span class="tag">{{ tag }}</span>
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </div>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

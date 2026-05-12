@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ year }} 年文章{% endblock %}
+
+{% block content %}
+<section class="year-archive">
+    <h1 class="year-archive-title">{{ year }} 年</h1>
+    <div class="year-archive-list">
+        {% for article in articles %}
+        <article class="article-card">
+            <a href="{{ article.url }}" class="article-link">
+                <h3 class="article-title">{{ article.meta.title }}</h3>
+                {% if article.meta.desc %}
+                <p class="article-desc">{{ article.meta.desc }}</p>
+                {% endif %}
+                <div class="article-meta">
+                    <time>{{ article.meta.date }}</time>
+                    {% if article.meta.tags %}
+                    <span class="article-tags">
+                        {% for tag in article.meta.tags %}
+                        <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+            </a>
+        </article>
+        {% endfor %}
+    </div>
+    <nav class="article-nav">
+        <a href="/" class="nav-back">← 返回首页</a>
+    </nav>
+</section>
+{% endblock %}
