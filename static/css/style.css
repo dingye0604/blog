@@ -768,7 +768,7 @@ a:hover {
 /* ── 响应式 ──────────────────────────────────────── */
 @media (max-width: 768px) {
     :root {
-        --side-padding: 20px;
+        --side-padding: 24px;
         --content-width: 100%;
     }
 
@@ -782,13 +782,19 @@ a:hover {
     }
 
     .site-logo {
-        font-size: 16px;
-        letter-spacing: 2px;
+        font-size: 15px;
+        letter-spacing: 1.5px;
     }
 
     .nav-links {
-        gap: 20px;
-        font-size: 12px;
+        gap: 14px;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-links a {
+        white-space: nowrap;
+        padding: 6px 0;
     }
 
     .hero {
@@ -806,6 +812,14 @@ a:hover {
 
     .article-page-title {
         font-size: 24px;
+    }
+
+    .article-header,
+    .article-toc,
+    .article-body,
+    .article-nav {
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
     .article-body {
@@ -839,5 +853,20 @@ a:hover {
 
     .article-title {
         font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-year {
+        display: none;
+    }
+
+    .nav-links {
+        gap: 20px;
+        font-size: 12px;
+    }
+
+    :root {
+        --side-padding: 28px;
     }
 }
