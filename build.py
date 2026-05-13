@@ -15,7 +15,12 @@ CONTENT_DIR = Path("content")
 TEMPLATES_DIR = Path("templates")
 STATIC_DIR = Path("static")
 OUTPUT_DIR = Path("output")
-BASE_URL = "/blog"  # GitHub Pages 子目录部署，根目录部署改为 ""
+
+# 部署目标："github" → dingye0604.github.io/blog（默认）
+#           "oss"    → musing.xin 阿里云 OSS + CDN
+TARGET = "github"
+
+BASE_URL = "/blog" if TARGET == "github" else ""
 
 # ── Jinja2 ────────────────────────────────────────
 env = Environment(
@@ -149,6 +154,35 @@ def build():
     build_about_page()
 
     print(f"Built {len(articles)} articles -> {OUTPUT_DIR}")
+
+    if TARGET == "oss":
+        upload_to_oss()
+
+
+def upload_to_oss():
+    """上传 output/ 到阿里云 OSS（仅 TARGET == 'oss' 时调用）。"""
+    import oss2
+
+    access_key = os.environ.get("OSS_ACCESS_KEY_ID")
+    access_secret = os.environ.get("OSS_ACCESS_KEY_SECRET")
+    endpoint = os.environ.get("OSS_ENDPOINT", "oss-cn-hangzhou.aliyuncs.com")
+    bucket_name = os.environ.get("OSS_BUCKET", "musing-xin")
+
+    if not access_key or not access_secret:
+        print("Error: OSS credentials not set (OSS_ACCESS_KEY_ID / OSS_ACCESS_KEY_SECRET)")
+        return
+
+    auth = oss2.Auth(access_key, access_secret)
+    bucket = oss2.Bucket(auth, endpoint, bucket_name)
+
+    for root, dirs, files in os.walk(OUTPUT_DIR):
+        for f in files:
+            local = Path(root) / f
+            key = str(local.relative_to(OUTPUT_DIR)).replace("\\", "/")
+            bucket.put_object_from_file(key, str(local))
+            print(f"  uploaded: {key}")
+
+    print("OSS upload done.")
 
 
 if __name__ == "__main__":
