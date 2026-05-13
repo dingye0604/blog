@@ -16,9 +16,10 @@ TEMPLATES_DIR = Path("templates")
 STATIC_DIR = Path("static")
 OUTPUT_DIR = Path("output")
 
-# 部署目标："github" → dingye0604.github.io/blog（默认）
-#           "oss"    → musing.xin 阿里云 OSS + CDN
-TARGET = "github"
+# 部署目标："github"    → dingye0604.github.io/blog（子目录，默认）
+#           "custom"    → musing.xin GitHub Pages 自定义域名
+#           "oss"       → musing.xin 阿里云 OSS + CDN
+TARGET = "custom"
 
 BASE_URL = "/blog" if TARGET == "github" else ""
 
