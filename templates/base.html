@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %} — 迟到了的碎碎念</title>
-    <link rel="stylesheet" href="{{ base_url }}/static/css/style.css">
-    {% block extra_head %}{% endblock %}
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="陈顶立的个人空间：开源主题、学习与写作，和迟到了的碎碎念。">
+<meta name="color-scheme" content="light dark">
+<title>{% block title %}{% endblock %} · 迟到了的碎碎念</title>
+<script src="{{ base_url }}/static/js/appearance.js"></script>
+<link rel="stylesheet" href="{{ base_url }}/static/fonts/wenkai.css">
+<link rel="stylesheet" href="{{ base_url }}/static/css/style.css">
+{% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header class="site-header">
-        <nav class="site-nav">
-            <a href="{{ base_url }}/" class="site-logo">迟到了的碎碎念</a>
-            <div class="nav-links">
-                <a href="{{ base_url }}/">首页</a>
-                <a href="{{ base_url }}/2026/" class="nav-year">2026</a>
-                <a href="{{ base_url }}/2025/" class="nav-year">2025</a>
-                <a href="{{ base_url }}/2024/" class="nav-year">2024</a>
-                <a href="{{ base_url }}/about.html" class="nav-about">关于</a>
-            </div>
-        </nav>
-    </header>
-
-    <main class="site-main">
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer class="site-footer">
-        <p>© 迟到了的碎碎念 · 随笔与思考</p>
-    </footer>
-
-    <script src="{{ base_url }}/static/js/main.js"></script>
-</body>
-</html>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header"><nav class="site-nav" aria-label="主导航">
+<a href="{{ base_url }}/" class="site-logo">迟到了的碎碎念<span class="logo-dot">。</span></a>
+<div class="nav-links"><a href="{{ base_url }}/">首页</a><a href="{{ base_url }}/projects.html">作品</a><a href="{{ base_url }}/writing.html">文字</a><a href="{{ base_url }}/about.html">关于</a></div>
+<button class="appearance-toggle" type="button" aria-label="切换网站明暗模式">深色</button>
+</nav></header>
+<main class="site-main" id="main">{% block content %}{% endblock %}</main>
+<footer class="site-footer"><a href="{{ base_url }}/" class="footer-name">陈顶立 <span>／ 迟到了的碎碎念</span></a><a href="https://github.com/dingye0604">GitHub ↗</a></footer>
+<script src="{{ base_url }}/static/js/main.js" defer></script>
+</body></html>

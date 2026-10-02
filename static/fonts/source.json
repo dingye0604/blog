@@ -1,0 +1,9 @@
+{
+  "source": "LXGW WenKai Regular (locally installed TTF)",
+  "upstream": "https://github.com/lxgw/LxgwWenKai",
+  "source_sha256": "39ad71264b588165b469e35e6afb162a378dacd1f95348160240ba9038ac3009",
+  "woff2_sha256": "4e2df4ac5c54c8ad9c2e6c67084da38a7cbd319abf5dfb453ad93c4a9bf790d9",
+  "characters": 2507,
+  "bytes": 563412,
+  "scope": "Site UI subset; Songti and monospace stacks unchanged."
+}

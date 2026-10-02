@@ -2,6 +2,7 @@
 """静态站点生成器：读取 content/ 下的 Markdown，生成 output/ 下的 HTML。"""
 
 import os
+import argparse
 import shutil
 from pathlib import Path
 from collections import defaultdict
@@ -69,10 +70,8 @@ def get_articles():
 def copy_static():
     """复制 static/ 到 output/static/。"""
     dst = OUTPUT_DIR / "static"
-    if dst.exists():
-        shutil.rmtree(dst)
     if STATIC_DIR.exists():
-        shutil.copytree(STATIC_DIR, dst)
+        shutil.copytree(STATIC_DIR, dst, dirs_exist_ok=True)
 
 
 def copy_content_assets():
@@ -98,7 +97,7 @@ def build_articles(articles):
     for art in articles:
         md.reset()
         body_html = md.convert(art["content"])
-        toc = md.toc
+        toc = md.toc if md.toc_tokens else ""
 
         html = template.render(
             article=art,
@@ -136,10 +135,8 @@ def build_about_page():
 
 def build():
     """完整构建流程。"""
-    # 清理并重建输出目录
-    if OUTPUT_DIR.exists():
-        shutil.rmtree(OUTPUT_DIR)
-    OUTPUT_DIR.mkdir(parents=True)
+    # Preserve existing files; use a fresh --output-dir for isolated previews.
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     copy_static()
     copy_content_assets()
@@ -153,6 +150,9 @@ def build():
     build_articles(articles)
     build_year_pages(articles)
     build_about_page()
+    for name in ("projects", "writing"):
+        html = env.get_template(f"{name}.html").render(articles=articles, base_url=BASE_URL)
+        (OUTPUT_DIR / f"{name}.html").write_text(html, encoding="utf-8")
 
     print(f"Built {len(articles)} articles -> {OUTPUT_DIR}")
 
@@ -187,4 +187,10 @@ def upload_to_oss():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--base-url", default=BASE_URL)
+    args = parser.parse_args()
+    OUTPUT_DIR = args.output_dir
+    BASE_URL = args.base_url.rstrip("/")
     build()

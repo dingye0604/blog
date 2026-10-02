@@ -1,0 +1,377 @@
+/* AbsolutelyGlass glass layer v1.0.5
+ * Web approximation of glass, not Apple's native Liquid Glass renderer.
+ * Original AbsolutelyBaseline is retained verbatim before this layer in theme.css.
+ */
+/* @settings
+name: AbsolutelyGlass · 玻璃材质
+id: claudeapple
+settings:
+  - id: ca-panel-opacity
+    title: 面板不透明度
+    description: 0 为正文底色完全透明；磨砂由面板磨砂模糊单独控制。正文建议 0.55–0.80。
+    type: variable-number-slider
+    default: 0.64
+    min: 0
+    max: 1
+    step: 0.01
+  - id: ca-window-opacity
+    title: 原生窗口底色不透明度
+    description: 仅原生透明生效时使用；建议 0.08–0.25。
+    type: variable-number-slider
+    default: 0.12
+    min: 0
+    max: 0.65
+    step: 0.01
+  - id: ca-blur
+    title: 面板磨砂模糊
+    description: CSS 面板模糊，不控制 Windows Acrylic 的系统模糊强度。
+    type: variable-number-slider
+    default: 24
+    min: 0
+    max: 40
+    step: 2
+    format: px
+  - id: ca-radius
+    title: 面板圆角
+    type: variable-number-slider
+    default: 16
+    min: 4
+    max: 24
+    step: 1
+    format: px
+  - id: ca-solid
+    title: 高可读性 · 不透明模式
+    description: 关闭玻璃模糊与透明，配套插件也会停用原生材质。
+    type: class-toggle
+    default: false
+*/
+
+body.theme-light, body.theme-dark {
+  --claudeapple-theme: 1;
+  --ca-panel-opacity: 0.64;
+  --ca-window-opacity: 0.12;
+  --ca-blur: 24px;
+  --ca-radius: 16px;
+  --titlebar-background: transparent;
+  --titlebar-background-focused: transparent;
+  --ribbon-background: transparent;
+  --tab-container-background: transparent;
+  --workspace-background-translucent: transparent;
+  --tab-background-active: var(--ca-control);
+  --background-modifier-border: var(--ca-edge);
+  --divider-color: var(--ca-edge);
+  --tab-outline-color: transparent;
+}
+body.theme-light {
+  --ca-rgb: 249, 247, 242;
+  --ca-solid-color: #f5f2ec;
+  --ca-edge: rgba(87, 73, 60, 0.17);
+  --ca-highlight: rgba(255, 255, 255, 0.88);
+  --ca-shadow: rgba(61, 49, 35, 0.13);
+  --ca-control: rgba(255, 255, 255, 0.58);
+  --ca-popup: rgba(251, 249, 245, 0.96);
+  --ca-sheen: rgba(255, 255, 255, 0.32);
+  --ca-ambient: radial-gradient(ellipse at 0% 0%, #dfc7af 0%, transparent 62%),
+    radial-gradient(ellipse at 100% 100%, #b5c6bf 0%, transparent 64%), #e5e2d9;
+}
+body.theme-dark {
+  --ca-rgb: 37, 38, 36;
+  --ca-solid-color: #272824;
+  --ca-edge: rgba(246, 238, 225, 0.16);
+  --ca-highlight: rgba(255, 248, 235, 0.24);
+  --ca-shadow: rgba(0, 0, 0, 0.24);
+  --ca-control: rgba(255, 246, 226, 0.09);
+  --ca-popup: rgba(39, 40, 37, 0.96);
+  --ca-sheen: rgba(255, 247, 228, 0.07);
+  --ca-ambient: radial-gradient(ellipse at 0% 0%, #655043 0%, transparent 64%),
+    radial-gradient(ellipse at 100% 100%, #344c45 0%, transparent 64%), #252a29;
+  --text-normal: #eee9df;
+  --text-muted: #c2bcb1;
+  --text-faint: #99958d;
+  --nav-item-color: var(--text-muted);
+  --nav-item-color-active: var(--text-normal);
+  --tab-text-color: var(--text-muted);
+  --tab-text-color-active: var(--text-normal);
+}
+
+/* A self-contained ambient fallback. It is not desktop transparency. */
+body:not(.is-mobile) { background: var(--ca-ambient) !important; }
+body:not(.is-mobile):is(.ca-native-glass, .is-translucent) {
+  background: rgba(var(--ca-rgb), var(--ca-window-opacity)) !important;
+}
+html:has(body.ca-native-glass) { background: transparent !important; }
+body:not(.is-mobile) :is(.app-container, .horizontal-main-container,
+  .workspace, .workspace-split, .workspace-tabs, .workspace-tab-container,
+  .workspace-ribbon, .workspace-ribbon.mod-left, .workspace-ribbon.mod-right,
+  .workspace-tab-header-container, .workspace-tab-header-container-inner,
+  .sidebar-toggle-button, .titlebar) {
+  background: transparent !important;
+}
+body:not(.is-mobile) .workspace-leaf {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* One material layer per leaf; nested editors stay clear to avoid opacity stacking. */
+body:not(.is-mobile) .workspace .workspace-leaf-content {
+  margin: 5px;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border: 1px solid var(--ca-edge) !important;
+  border-radius: var(--ca-radius) !important;
+  background: linear-gradient(145deg, var(--ca-sheen), transparent 48%),
+    rgba(var(--ca-rgb), var(--ca-panel-opacity)) !important;
+  box-shadow: inset 0 1px 0 var(--ca-highlight),
+    inset 0 -1px 0 var(--ca-edge), 0 8px 24px -12px var(--ca-shadow) !important;
+  backdrop-filter: blur(var(--ca-blur)) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(var(--ca-blur)) saturate(125%) !important;
+  overflow: hidden;
+}
+body:not(.is-mobile) .workspace-leaf-content > .view-content,
+body:not(.is-mobile) .workspace-leaf-content > .view-header,
+body:not(.is-mobile) .workspace-leaf-content :is(.markdown-source-view,
+  .markdown-preview-view, .cm-editor, .cm-scroller, .cm-gutters,
+  .nav-files-container, .view-header-title-container, .view-header-title-container::after) {
+  background: transparent !important;
+}
+body:not(.is-mobile) .workspace-leaf-content > .view-header {
+  border-bottom: 1px solid var(--ca-edge);
+}
+/* Sidebars share the native window material, without an extra tinted card. */
+body.theme-light {
+  --ca-sidebar-text: #101211;
+  --ca-sidebar-muted: #202321;
+  --ca-sidebar-faint: #303531;
+}
+body.theme-dark {
+  --ca-sidebar-text: #ffffff;
+  --ca-sidebar-muted: #f0f2ee;
+  --ca-sidebar-faint: #dce2da;
+}
+/* Local text tokens also reach plugin side panels; editor/modal tokens stay intact. */
+body:not(.is-mobile) :is(.mod-left-split, .mod-right-split, .workspace-ribbon) {
+  --text-normal: var(--ca-sidebar-text);
+  --text-muted: var(--ca-sidebar-muted);
+  --text-faint: var(--ca-sidebar-faint);
+  --nav-item-color: var(--ca-sidebar-text);
+  --nav-item-color-hover: var(--ca-sidebar-text);
+  --nav-item-color-active: var(--ca-sidebar-text);
+  --nav-collapse-icon-color: var(--ca-sidebar-muted);
+  --nav-collapse-icon-color-collapsed: var(--ca-sidebar-muted);
+  --tab-text-color: var(--ca-sidebar-muted);
+  --tab-text-color-active: var(--ca-sidebar-text);
+  --tab-text-color-focused: var(--ca-sidebar-text);
+  --tab-text-color-focused-active: var(--ca-sidebar-text);
+  --icon-color: var(--ca-sidebar-muted);
+  --icon-color-hover: var(--ca-sidebar-text);
+  --icon-color-focused: var(--ca-sidebar-text);
+  --icon-color-active: var(--ca-sidebar-text);
+  --icon-opacity: 1;
+  color: var(--ca-sidebar-text);
+}
+body:not(.is-mobile) .workspace :is(.mod-left-split, .mod-right-split) .workspace-leaf-content {
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body:not(.is-mobile) .workspace :is(.mod-left-split, .mod-right-split) .workspace-leaf-content > .view-header {
+  border-bottom-color: transparent;
+}
+body:not(.is-mobile) .workspace-tab-header.is-active {
+  border-radius: 10px !important;
+  background: var(--ca-control) !important;
+  box-shadow: inset 0 1px 0 var(--ca-highlight), 0 2px 8px var(--ca-shadow) !important;
+}
+/* Document tabs follow sidebar text in both themes and all interaction states. */
+body:not(.is-mobile) .workspace .mod-root .workspace-tabs {
+  --tab-text-color: var(--ca-sidebar-text);
+  --tab-text-color-active: var(--ca-sidebar-text);
+  --tab-text-color-focused: var(--ca-sidebar-text);
+  --tab-text-color-focused-active: var(--ca-sidebar-text);
+  --tab-text-color-focused-active-current: var(--ca-sidebar-text);
+  --tab-text-color-focused-highlighted: var(--ca-sidebar-text);
+  --tab-background-active: rgba(var(--ca-rgb), var(--ca-panel-opacity));
+}
+body:not(.is-mobile) .workspace .mod-root .workspace-tab-header,
+body:not(.is-mobile) .workspace .mod-root .workspace-tab-header :is(.workspace-tab-header-inner-title, .workspace-tab-header-inner-icon, .workspace-tab-header-inner-close-button) {
+  color: var(--ca-sidebar-text) !important;
+  opacity: 1 !important;
+}
+/* One continuous silhouette: no separate corner tiles or overlapping filters. */
+body:not(.is-mobile) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active {
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  isolation: isolate;
+}
+body:not(.is-mobile) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  inset: 0 calc(-1 * var(--tab-curve));
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: var(--tab-background-active);
+  backdrop-filter: blur(var(--ca-blur)) saturate(125%);
+  -webkit-backdrop-filter: blur(var(--ca-blur)) saturate(125%);
+  box-shadow: none !important;
+  clip-path: shape(from 0% 100%,
+    curve to var(--tab-curve) calc(100% - var(--tab-curve)) with var(--tab-curve) 100%,
+    line to var(--tab-curve) var(--tab-radius),
+    curve to calc(var(--tab-curve) + var(--tab-radius)) 0% with var(--tab-curve) 0%,
+    line to calc(100% - var(--tab-curve) - var(--tab-radius)) 0%,
+    curve to calc(100% - var(--tab-curve)) var(--tab-radius) with calc(100% - var(--tab-curve)) 0%,
+    line to calc(100% - var(--tab-curve)) calc(100% - var(--tab-curve)),
+    curve to 100% 100% with calc(100% - var(--tab-curve)) 100%, close);
+}
+body:not(.is-mobile) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active::after {
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+}
+body:not(.is-mobile) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-leaf-content {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  border: 0 !important;
+  border-radius: 0 0 var(--ca-radius) var(--ca-radius) !important;
+  box-shadow: none !important;
+}
+/* No independent sheen: zero opacity must leave no painted editor background. */
+body:not(.is-mobile) .workspace .mod-root .workspace-leaf-content {
+  background: rgba(var(--ca-rgb), var(--ca-panel-opacity)) !important;
+}
+body:not(.is-mobile) :is(.nav-file-title, .nav-folder-title).is-active {
+  background: var(--nav-item-background-active);
+  box-shadow: inset 0 1px 0 var(--ca-highlight);
+  border-radius: 8px;
+}
+body:not(.is-mobile) :is(.menu, .suggestion-container, .modal, .popover, .prompt) {
+  background: var(--ca-popup) !important;
+  border: 1px solid var(--ca-edge);
+  border-radius: var(--ca-radius);
+  box-shadow: inset 0 1px 0 var(--ca-highlight), 0 18px 56px var(--ca-shadow);
+  backdrop-filter: blur(var(--ca-blur));
+}
+/* Settings are a reading surface, not an additional full-window blur layer.
+ * Avoid transformed/animated backdrop textures over Windows Acrylic.
+ */
+body:not(.is-mobile) .modal-container .modal {
+  background: var(--ca-solid-color) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+body:not(.is-mobile) .modal-container .modal-bg {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+body:not(.is-mobile) .modal.mod-sidebar-layout :is(.modal-header, .setting-page-titlebar) {
+  background: var(--ca-solid-color) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body:not(.is-mobile) .modal.mod-sidebar-layout :is(.vertical-tab-header-group-container, .vertical-tab-content):hover {
+  will-change: auto !important;
+}
+body:not(.is-mobile) :is(.app-container, .workspace, .workspace-split) {
+  transition: none !important;
+}
+/* Obsidian 1.13 settings use a separate is-popout-modal window, without
+ * .modal-container. Its titlebar must not inherit the workspace transparency.
+ */
+html:has(body.is-popout-modal) {
+  background: var(--background-secondary, #f5f2ec);
+}
+body.is-popout-modal:not(.is-mobile) {
+  --titlebar-background: var(--ca-solid-color);
+  --titlebar-background-focused: var(--ca-solid-color);
+  --titlebar-text-color: var(--text-normal);
+  --titlebar-text-color-focused: var(--text-normal);
+  background: var(--ca-solid-color) !important;
+}
+body.is-popout-modal:not(.is-mobile) .titlebar {
+  background: var(--ca-solid-color) !important;
+  color: var(--text-normal) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+body.is-popout-modal:not(.is-mobile) > .modal {
+  background: var(--ca-solid-color) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body.is-popout-modal.mod-windows .titlebar-button-container.mod-right .titlebar-button {
+  color: var(--text-normal) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+/* Use Obsidian's own window-control SVGs; no masked replacement icons here. */
+body.is-popout-modal.mod-windows .titlebar-button-container.mod-right .titlebar-button svg {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  background: transparent !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+body.is-popout-modal.mod-windows .titlebar-button-container.mod-right .titlebar-button :is(path, rect, circle) {
+  visibility: visible !important;
+}
+body:not(.is-mobile) .status-bar {
+  background: var(--ca-popup) !important;
+  border: 1px solid var(--ca-edge);
+  border-radius: 10px 0 0 0;
+}
+body:not(.is-mobile) :is(input:not([type=checkbox]):not([type=range]), textarea, select) {
+  background-color: var(--ca-control);
+}
+
+/* Explicit accessibility fallback; works even without the media-query support. */
+body.ca-solid:not(.is-mobile) {
+  --ca-panel-opacity: 1;
+  --ca-window-opacity: 1;
+  --ca-blur: 0px;
+  --ca-ambient: var(--ca-solid-color);
+  --ca-sheen: transparent;
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:not(.is-mobile) {
+    --ca-panel-opacity: 1 !important;
+    --ca-window-opacity: 1 !important;
+    --ca-blur: 0px !important;
+    --ca-ambient: var(--ca-solid-color);
+    --ca-sheen: transparent;
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  body:not(.is-mobile) { --ca-panel-opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:not(.is-mobile) .workspace-leaf,
+  body:not(.is-mobile) .workspace-leaf-content { animation: none !important; transition: none !important; }
+}
+@media print {
+  body, body .workspace .workspace-leaf-content {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    border: 0 !important;
+  }
+}

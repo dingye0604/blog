@@ -1,0 +1,8 @@
+/* Self-hosted web subset. Original copyright and license: LXGWWenKai.OFL.txt. */
+@font-face {
+  font-family: 'Site WenKai';
+  src: local('LXGW WenKai'), local('LXGWWenKai-Regular'), url('site-wenkai.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}

@@ -1,41 +1,24 @@
 {% extends "base.html" %}
-
 {% block title %}首页{% endblock %}
-
 {% block content %}
 <section class="hero">
-    <h1 class="hero-title">迟到了的碎碎念</h1>
-    <p class="hero-desc">随笔 · 影评 · 辩论 · 成长</p>
-    <p class="hero-quote">"所谓伊人，在水一方"</p>
+<p class="eyebrow">陈顶立的个人空间</p>
+<h1>做一些喜欢的东西。<br><span>写一些想留下的话。</span></h1>
+<p class="hero-desc">关于工具、阅读与日常。让想法成为可以使用、可以感受的东西。</p>
+<a class="text-link" href="{{ base_url }}/projects.html">探索作品 ↗</a>
 </section>
-
-<section class="article-list">
-    {% for year, year_articles in articles | groupby('year') | reverse %}
-    <div class="year-section">
-        <h2 class="year-label"><a href="{{ base_url }}/{{ year }}/">{{ year }}</a></h2>
-        <div class="year-articles">
-            {% for article in year_articles %}
-            <article class="article-card">
-                <a href="{{ article.url }}" class="article-link">
-                    <h3 class="article-title">{{ article.meta.title }}</h3>
-                    {% if article.meta.desc %}
-                    <p class="article-desc">{{ article.meta.desc }}</p>
-                    {% endif %}
-                    <div class="article-meta">
-                        <time>{{ article.meta.date }}</time>
-                        {% if article.meta.tags %}
-                        <span class="article-tags">
-                            {% for tag in article.meta.tags %}
-                            <span class="tag">{{ tag }}</span>
-                            {% endfor %}
-                        </span>
-                        {% endif %}
-                    </div>
-                </a>
-            </article>
-            {% endfor %}
-        </div>
-    </div>
-    {% endfor %}
-</section>
+<section class="project-summary reveal" aria-labelledby="work-title">
+<div class="section-heading"><h2 id="work-title">做过的小东西</h2><a class="text-link" href="{{ base_url }}/projects.html">探索作品 ↗</a></div>
+<div class="project-summary-links">
+<a href="{{ base_url }}/projects.html#project-heading"><h3>AbsolutelyGlass <span aria-hidden="true">↗</span></h3><p>为笔记留一层柔和的玻璃。</p></a>
+<a href="{{ base_url }}/projects.html#project-heading"><h3>AbsolutelyBaseline <span aria-hidden="true">↗</span></h3><p>专注阅读的暖色配色与排版。</p></a>
+</div></section>
+<section class="writing-section reveal">
+<div class="section-heading"><h2>最近写下的</h2><a class="text-link" href="{{ base_url }}/writing.html">全部文字 ↗</a></div>
+<div class="editorial-list">
+{% for article in articles[:3] %}
+<a class="editorial-row" href="{{ article.url }}"><time>{{ article.meta.date }}</time><div><h3>{{ article.meta.title }}</h3>{% if article.meta.desc %}<p>{{ article.meta.desc }}</p>{% endif %}</div><span class="row-arrow" aria-hidden="true">↗</span></a>
+{% endfor %}
+</div></section>
+<section class="about-strip reveal"><p>学习，做东西，偶尔写作。</p><a class="text-link" href="{{ base_url }}/about.html">关于我 ↗</a></section>
 {% endblock %}

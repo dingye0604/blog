@@ -1,0 +1,43 @@
+MIT License
+
+Copyright (c) 2026 dingye0604 (CLaudeApple and ClaudeBaseline modifications)
+Copyright (c) 2025 aaaa​alexis (Baseline — https://github.com/aaaaalexis/obsidian-baseline)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Third-party notices
+
+This software redistributes the Instrument Serif typeface, embedded in
+theme.css as a base64 WOFF2 data URI.
+
+  Instrument Serif
+  Copyright 2022 The Instrument Serif Project Authors
+  https://github.com/Instrument/instrument-serif
+  Licensed under the SIL Open Font License, Version 1.1
+  https://openfontlicense.org
+
+The SIL Open Font License is not the MIT License and is not satisfied by the
+text above. If you redistribute this theme, keep this notice with it, or remove
+the embedded font data from theme.css if you do not need it.
+
+Inter is referenced by family name only and is not redistributed here; it is
+bundled with Obsidian and licensed separately under the SIL Open Font License,
+Version 1.1.

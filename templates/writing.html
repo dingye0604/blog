@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}文字{% endblock %}
+{% block content %}
+<header class="page-intro"><p class="eyebrow">迟到了的碎碎念</p><h1>文字留下来，日子慢慢走。</h1><p>随笔、影评、辩论，以及生活中的一些念头。</p></header>
+<section class="writing-archive">
+{% for year, year_articles in articles | groupby('year') | reverse %}
+<div class="archive-group"><h2><a href="{{ base_url }}/{{ year }}/">{{ year }} ↗</a></h2><div class="editorial-list">
+{% for article in year_articles %}
+<a class="editorial-row" href="{{ article.url }}"><time>{{ article.meta.date }}</time><div><h3>{{ article.meta.title }}</h3>{% if article.meta.desc %}<p>{{ article.meta.desc }}</p>{% endif %}</div><span class="row-arrow" aria-hidden="true">↗</span></a>
+{% endfor %}
+</div></div>
+{% endfor %}
+</section>
+{% endblock %}

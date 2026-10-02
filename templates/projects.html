@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}作品{% endblock %}
+{% block content %}
+<header class="page-intro"><p class="eyebrow">开源作品</p><h1>从每天使用的工具开始。</h1><p>为自己的阅读与写作做一点改变，也把它们分享给你。</p></header>
+{% include "project_preview.html" %}
+<section class="credits-section"><h2>从社区生长出来</h2><p>两个主题均继承 <a href="https://github.com/aaaaalexis/obsidian-baseline">Baseline</a> 的布局与组件。AbsolutelyBaseline 调整配色和排版，AbsolutelyGlass 在此基础上增加玻璃材质。主题采用 MIT 许可，字体许可单独保留。</p><p>网页演示加载原主题 CSS，并提供精简的笔记界面。它不运行 Obsidian 本体，也不包含桌面插件功能。</p><a class="text-link" href="{{ base_url }}/static/vendor/NOTICE.md">资源与许可说明 ↗</a></section>
+{% endblock %}

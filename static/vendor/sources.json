@@ -1,0 +1,12 @@
+[
+  {
+    "file": "absolutely-baseline.css",
+    "source": "https://github.com/dingye0604/AbsolutelyBaseline/blob/main/theme.css",
+    "sha256": "39a9f2feacbd98b7027216683b2d15dd28ff4f4a9a1437c1298913e8cf08aca8"
+  },
+  {
+    "file": "absolutely-glass.css",
+    "source": "https://github.com/dingye0604/AbsolutelyGlass/blob/main/glass.css",
+    "sha256": "d6a93827bcc214bc7dea4f50c901e0adc065404536ca5cdb4886033a511cb5b8"
+  }
+]
